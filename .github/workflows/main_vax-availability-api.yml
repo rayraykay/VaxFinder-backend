@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - staging
+      - rayraykay/beta
   workflow_dispatch:
 
 jobs:
@@ -33,6 +34,7 @@ jobs:
 
     - name: Run linters (mypy, black, isort)
       run: |
+       sleep 10
        poetry run mypy --config-file mypy.ini .
        poetry run black --line-length 79 --check .
        poetry run isort --profile black --line-length 79 --multi-line 3 \
@@ -63,6 +65,9 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/vax-hunters-api:${{ github.sha }}
         file: ./Dockerfile
+
+    - name: echo sha
+      run: echo ${{ github.sha }}
 
   DeployStaging:
     runs-on: ubuntu-latest
